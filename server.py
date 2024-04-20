@@ -1,3 +1,4 @@
+# chtgpt link: https://chat.openai.com/share/a2b49ca9-cc93-4415-8216-873e54833c07
 import os
 import random
 import socket
