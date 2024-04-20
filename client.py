@@ -156,10 +156,11 @@ class Client:
                 client_socket.close() # close the client socket anyway
             self.color_print('Server disconnected listening for offer request...', 'green')
 
-
 if __name__ == '__main__':
-
-    client = Client()
-    client.start()
+    try:
+        client = Client()
+        client.start()
+    except KeyboardInterrupt:
+        client.color_print('Client shut down manually', 'red')
 
 
