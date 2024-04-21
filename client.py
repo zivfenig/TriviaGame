@@ -1,6 +1,6 @@
 import random
 import socket
-
+import threading
 
 UDP_PORT = 13117
 MAGIC_COOKIE = b'\xab\xcd\xdc\xba'
@@ -65,9 +65,13 @@ class Client:
         Get user input
         :return: user input
         """
+        my_timer = threading.Timer(10,lambda:self.color_print('Time is up! Enter any input to proceed','red'))
+        my_timer.start()
         user_input = input('your answer: ').strip()
+        my_timer.cancel()
         while self.is_invalid_answer(user_input): # check if the answer is invalid
             user_input = input('you answer: ').strip()
+            my_timer.cancel()
         return user_input
 
     def start_udp_client(self):
@@ -136,7 +140,7 @@ class Client:
                 continue #Try again to connect to the server
             try:
                 while True: #Round loop
-                    client_socket.settimeout(10) # set timeout for the client socket
+                    client_socket.settimeout(20) # avoid timout bug
                     message = client_socket.recv(1024).decode()
                     if message == '' or message == 'game over': # check if queestions finished or the server disconnected
                         self.color_print('Game over!', 'red')
@@ -155,6 +159,7 @@ class Client:
             finally:
                 client_socket.close() # close the client socket anyway
             self.color_print('Server disconnected listening for offer request...', 'green')
+
 
 if __name__ == '__main__':
     try:
