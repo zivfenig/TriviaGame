@@ -328,6 +328,22 @@ def broadcast_tcp(message):
             if client in players_answered_events:
                 players_answered_events[client].set() # trigger the event to release the server from waiting for the client to answer
 
+def broadcast_tcp_questions(message):
+    """
+    Broadcast a message to all the active players
+    :param message:
+
+    """
+    for client in playing_clients:
+        try:
+            client.sendall(message.encode())
+        except OSError: # if the client disconnected (all the possible connection exception)
+            clients.remove(client)
+            if client in playing_clients:
+                playing_clients.remove(client) # remove the client from the playing clients list
+            if client in players_answered_events:
+                players_answered_events[client].set() # trigger the event to release the server from waiting for the client to answer
+
 
 def shuffle_questions(questions):
     """
@@ -515,14 +531,15 @@ def start_server():
                 break
             the_question = question
             set_current_question(the_question)
-
+            generete_players_list = ''
             with print_lock:
                 if first_round_done:
-                    print(generate_active_players_names_list(f'Round {i+1}, played by '))
+                    generete_players_list = generate_active_players_names_list(f'Round {i+1}, played by ')
+                    print(generete_players_list)
                 server_print(f'\U0001F914 True or False: {the_question}', 'yellow')
 
             round_started_event.set() # set the round started event to notify the threads that the round has started
-            broadcast_tcp(f'True or False: {the_question}') # broadcast the question to all the clients
+            broadcast_tcp_questions(f'{generete_players_list}\nTrue or False: {the_question}') # broadcast the question to all the clients
             for client_socket in players_answered_events:
                 players_answered_events[client_socket].wait() # wait for the threads to answer the question
             everyone_answered_event.set() # set the everyone answered event to notify the threads that everyone has answered the question
