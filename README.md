@@ -1,2 +1,2 @@
 # TriviaGame
-Trivia game about IDF
+Welcome to IDF Trivia
