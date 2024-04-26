@@ -1,2 +1,2 @@
 # TriviaGame
-Welcome to IDF Trivia
+Welcome to our trivia game, where players test their knowledge about the Israeli Defence Forces (IDF). In this multiplayer game, participants join a lively competition answering true or false questions related to various aspects of the IDF. Players connect to the server, receive questions, and submit their answers within a limited time frame. The game features dynamic player interactions, colorful user interfaces, and real-time feedback on correct and incorrect answers.
